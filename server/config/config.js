@@ -17,6 +17,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 let urlBD;
 
 if (process.env.NODE_ENV === 'dev') urlBD = 'mongodb://localhost:27017/cafe';
-else urlBD = 'mongodb+srv://riverahan:Mariobrosking21@cluster0.vz8od.mongodb.net/cafe?retryWrites=true&w=majority';
+else urlBD = process.env.MONGO_URI;
 
 process.env.URLDB = urlBD;
