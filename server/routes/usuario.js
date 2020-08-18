@@ -2,16 +2,16 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
-const { isNull } = require('underscore');
+const { VerificacionToken, ValidacionAdminRole } = require('../middlewares/autenticacion');
 
 const app = express();
 
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', VerificacionToken, (req, res) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
-    let pagina = req.query.password || 5;
+    let pagina = req.query.pagina || 5;
     pagina = Number(pagina);
 
     Usuario.find({ estado: true }, 'nombre email role estado google img').skip(desde).limit(pagina).exec((err, usuarios) => {
@@ -37,7 +37,7 @@ app.get('/usuario', function(req, res) {
     });
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [VerificacionToken, ValidacionAdminRole], (req, res) => {
     const body = req.body;
 
     const usuario = new Usuario({
@@ -62,7 +62,7 @@ app.post('/usuario', function(req, res) {
     });
 })
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
     const id = req.params.id;
     const body = _.pick(req.body, ['email', 'nombre', 'password', 'img', 'role', 'estado']);
@@ -83,7 +83,7 @@ app.put('/usuario/:id', function(req, res) {
     })
 })
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
     const id = req.params.id;
 

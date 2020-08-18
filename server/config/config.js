@@ -11,6 +11,18 @@ process.env.PORT = process.env.PORT || 3000;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 /**
+ * Vencimento Token
+ */
+
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+/**
+ * SEED  del token
+ */
+
+process.env.SEED = process.env.SEED || 'desarrollo';
+
+/**
  * Base de Datos
  */
 
