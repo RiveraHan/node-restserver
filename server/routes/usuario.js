@@ -34,6 +34,7 @@ app.get('/usuario', VerificacionToken, (req, res) => {
         })
 
 
+
     });
 });
 
@@ -68,7 +69,7 @@ app.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => 
     const body = _.pick(req.body, ['email', 'nombre', 'password', 'img', 'role', 'estado']);
 
 
-    Usuario.findOneAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
         if (err) {
             return res.status(400).json({
@@ -78,10 +79,10 @@ app.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => 
         }
         res.json({
             ok: true,
-            usuarios: usuarioDB
-        })
-    })
-})
+            usuario: usuarioDB
+        });
+    });
+});
 
 app.delete('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
