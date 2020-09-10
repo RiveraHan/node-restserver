@@ -14,7 +14,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
  * Vencimento Token
  */
 
-process.env.CADUCIDAD_TOKEN = Math.floor(Date.now() / 1000) + '30 days'
+process.env.CADUCIDAD_TOKEN = '30 days';
 
 /**
  * SEED  del token

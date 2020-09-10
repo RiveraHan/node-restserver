@@ -1,1 +1,11 @@
 node_modules/
+
+# Los temporales del Upload
+tmp/
+
+# ignorando los archivos de imagenes
+
+/uploads/productos/*
+/uploads/usuarios/*
+!/uploads/productos/.gitkeep
+!/uploads/usuarios/.gitkeep
