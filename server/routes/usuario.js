@@ -6,7 +6,6 @@ const { VerificacionToken, ValidacionAdminRole } = require('../middlewares/auten
 
 const app = express();
 
-
 app.get('/usuario', VerificacionToken, (req, res) => {
 
     let desde = req.query.desde || 0;

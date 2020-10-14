@@ -1,7 +1,10 @@
 /**
- * Puerto
+ * Definimos las varibales de entorno
  */
 
+/**
+ * Puerto
+ */
 
 process.env.PORT = process.env.PORT || 3000;
 
@@ -14,7 +17,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
  * Vencimento Token
  */
 
-process.env.CADUCIDAD_TOKEN = '30 days';
+process.env.CADUCIDAD_TOKEN = '24h';
 
 /**
  * SEED  del token
@@ -28,9 +31,7 @@ process.env.SEED = process.env.SEED || 'desarrollo';
 
 let urlBD;
 
-if (process.env.NODE_ENV === 'dev') urlBD = 'mongodb://localhost:27017/cafe';
-else urlBD = process.env.MONGO_URI;
-
+process.env.NODE_ENV === 'dev' ? urlBD = 'mongodb://localhost:27017/cafe' : urlBD = process.env.MONGO_URI;
 process.env.URLDB = urlBD;
 
 /**
