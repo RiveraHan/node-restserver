@@ -1,13 +1,12 @@
 const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID)
 const Usuario = require('../models/usuario');
 
-const app = express();
-
-app.post('/login', (req, res) => {
+router.post('/login', (req, res) => {
 
 
     const body = req.body;
@@ -59,7 +58,7 @@ app.post('/login', (req, res) => {
 async function verify(token) {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the router that accesses the backend
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
@@ -72,9 +71,10 @@ async function verify(token) {
         google: true
     }
 }
-app.post('/google', async(req, res) => {
+router.post('/google', async(req, res) => {
 
-    const token = req.body.idtoken
+    // const token = req.get('idtoken');
+    const token = req.body.idtoken;
 
     const googleUser = await verify(token)
         .catch(e => {
@@ -143,4 +143,4 @@ app.post('/google', async(req, res) => {
     });
 });
 
-module.exports = app;
+module.exports = router;

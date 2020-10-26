@@ -1,14 +1,11 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const _ = require('underscore');
 const Producto = require('../models/producto');
 const Categoria = require('../models/categoria');
 const { VerificacionToken } = require('../middlewares/autenticacion');
-const producto = require('../models/producto');
-const { verify } = require('jsonwebtoken');
 
-
-app.get('/productos', VerificacionToken, (req, res) => {
+router.get('/productos', VerificacionToken, (req, res) => {
 
     const desde = req.query.desde || 0;
     Number(desde);
@@ -29,7 +26,7 @@ app.get('/productos', VerificacionToken, (req, res) => {
     });
 });
 
-app.get('/producto/:id', VerificacionToken, (req, res) => {
+router.get('/producto/:id', VerificacionToken, (req, res) => {
 
     const id = req.params.id;
 
@@ -58,7 +55,7 @@ app.get('/producto/:id', VerificacionToken, (req, res) => {
     });
 });
 
-app.get('/productos/buscar/:termino', VerificacionToken, (req, res) => {
+router.get('/productos/buscar/:termino', VerificacionToken, (req, res) => {
 
     const termino = req.params.termino;
     const regex = new RegExp(termino, 'i');
@@ -79,7 +76,7 @@ app.get('/productos/buscar/:termino', VerificacionToken, (req, res) => {
     })
 })
 
-app.post('/producto', VerificacionToken, (req, res) => {
+router.post('/producto', VerificacionToken, (req, res) => {
 
     const body = req.body;
 
@@ -130,7 +127,7 @@ app.post('/producto', VerificacionToken, (req, res) => {
 });
 
 
-app.put('/producto/:id', VerificacionToken, (req, res) => {
+router.put('/producto/:id', VerificacionToken, (req, res) => {
 
     const id = req.params.id;
     const body = _.pick(req.body, ['nombre', 'precioUni', 'categoria', 'disponible', 'descripcion', ]);
@@ -159,7 +156,7 @@ app.put('/producto/:id', VerificacionToken, (req, res) => {
     });
 });
 
-app.delete('/producto/:id', VerificacionToken, (req, res) => {
+router.delete('/producto/:id', VerificacionToken, (req, res) => {
 
     const id = req.params.id;
 
@@ -202,4 +199,4 @@ app.delete('/producto/:id', VerificacionToken, (req, res) => {
 
 });
 
-module.exports = app;
+module.exports = router;

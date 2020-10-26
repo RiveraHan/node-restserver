@@ -2,9 +2,9 @@ const express = require('express');
 const { VerificacionToken, ValidacionAdminRole } = require('../middlewares/autenticacion');
 const Categoria = require('../models/categoria');
 
-const app = express();
+const router = express.Router();
 
-app.get('/categoria', VerificacionToken, (req, res) => {
+router.get('/categoria', VerificacionToken, (req, res) => {
 
     Categoria.find({}).sort('descripcion').populate('usuario', 'nombre email').exec((err, categorias) => {
         if (err) {
@@ -21,7 +21,7 @@ app.get('/categoria', VerificacionToken, (req, res) => {
     });
 });
 
-app.get('/categoria/:id', VerificacionToken, (req, res) => {
+router.get('/categoria/:id', VerificacionToken, (req, res) => {
 
 
     const id = req.params.id;
@@ -48,33 +48,46 @@ app.get('/categoria/:id', VerificacionToken, (req, res) => {
     });
 });
 
-app.post('/categoria', VerificacionToken, (req, res) => {
+router.post('/categoria', VerificacionToken, (req, res) => {
 
     const body = req.body;
-
-    const categoria = new Categoria({
-        descripcion: body.descripcion,
-        usuario: req.usuario._id
-    });
-
-
-    categoria.save((err, categoriaDB) => {
-        if (err || !categoriaDB) {
-            return res.status(500).json({
+    const descripcion = body.descripcion;
+    const regex = new RegExp(descripcion, 'i');
+    Categoria.findOne({ descripcion: regex }, (err, categoriaDB) => {
+        if (categoriaDB) {
+            return res.status(400).json({
                 ok: false,
-                err
+                error: {
+                    message: 'La categoria ya existe'
+                }
+            });
+        } else {
+
+            const categoria = new Categoria({
+                descripcion: body.descripcion,
+                usuario: req.usuario._id
+            });
+
+
+            categoria.save((err, categoriaDB) => {
+                if (err || !categoriaDB) {
+                    return res.status(500).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+
+                res.json({
+                    ok: true,
+                    categoria: categoriaDB
+                });
             });
         }
-
-
-        res.json({
-            ok: true,
-            categoria: categoriaDB
-        });
     });
 });
 
-app.put('/categoria/:id', VerificacionToken, (req, res) => {
+router.put('/categoria/:id', VerificacionToken, (req, res) => {
 
     const id = req.params.id;
     const descripcion = req.body.descripcion;
@@ -105,7 +118,7 @@ app.put('/categoria/:id', VerificacionToken, (req, res) => {
     });
 });
 
-app.delete('/categoria/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
+router.delete('/categoria/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
 
     const id = req.params.id;
@@ -134,4 +147,4 @@ app.delete('/categoria/:id', [VerificacionToken, ValidacionAdminRole], (req, res
     });
 });
 
-module.exports = app;
+module.exports = router;

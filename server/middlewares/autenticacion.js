@@ -54,7 +54,7 @@ const ValidacionAdminRole = (req, res, next) => {
 
 const VerificaTokenImg = (req, res, next) => {
 
-    const token = req.query.token;
+    const token = req.get('token');
 
     jwt.verify(token, process.env.SEED, (err, decoded) => {
         if (err) {

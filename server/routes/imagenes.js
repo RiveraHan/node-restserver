@@ -1,10 +1,10 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const { VerificaTokenImg } = require('../middlewares/autenticacion');
 
-app.get('/imagen/:tipo/:img', VerificaTokenImg, (req, res) => {
+router.get('/imagen/:tipo/:img', VerificaTokenImg, (req, res) => {
 
     const tipo = req.params.tipo;
     const img = req.params.img;
@@ -22,4 +22,4 @@ app.get('/imagen/:tipo/:img', VerificaTokenImg, (req, res) => {
     }
 })
 
-module.exports = app;
+module.exports = router;

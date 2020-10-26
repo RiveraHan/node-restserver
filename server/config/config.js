@@ -17,7 +17,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
  * Vencimento Token
  */
 
-process.env.CADUCIDAD_TOKEN = '24h';
+process.env.CADUCIDAD_TOKEN = '1h';
 
 /**
  * SEED  del token

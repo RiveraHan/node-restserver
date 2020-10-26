@@ -1,12 +1,11 @@
 const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
 const { VerificacionToken, ValidacionAdminRole } = require('../middlewares/autenticacion');
 
-const app = express();
-
-app.get('/usuario', VerificacionToken, (req, res) => {
+router.get('/usuarios', VerificacionToken, (req, res) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -37,36 +36,43 @@ app.get('/usuario', VerificacionToken, (req, res) => {
     });
 });
 
-app.post('/usuario', [VerificacionToken, ValidacionAdminRole], (req, res) => {
+router.post('/usuario', [VerificacionToken, ValidacionAdminRole], (req, res) => {
     const body = req.body;
 
-    const usuario = new Usuario({
-        nombre: body.nombre,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        role: body.role
-    });
+    if (body.password.length >= 6) {
 
-    usuario.save((err, usuarioDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
+        const usuario = new Usuario({
+            nombre: body.nombre,
+            email: body.email,
+            password: bcrypt.hashSync(body.password, 10),
+            role: body.role
+        });
 
-        res.json({
-            ok: true,
-            usuario: usuarioDB
-        })
-    });
+        usuario.save({ runValidators: true }, (err, usuarioDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                usuario: usuarioDB
+            })
+        });
+    } else {
+
+        res.status(400).json({ ok: false, message: ('La contraseña debe ser mínimo de 6 caracteres') });
+    }
+
+
 })
 
-app.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
+router.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
     const id = req.params.id;
-    const body = _.pick(req.body, ['email', 'nombre', 'password', 'img', 'role', 'estado']);
-
+    const body = _.pick(req.body, ['email', 'nombre', 'img', 'role', 'estado']);
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
@@ -83,7 +89,7 @@ app.put('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => 
     });
 });
 
-app.delete('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
+router.delete('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) => {
 
     const id = req.params.id;
 
@@ -117,4 +123,4 @@ app.delete('/usuario/:id', [VerificacionToken, ValidacionAdminRole], (req, res) 
 
 });
 
-module.exports = app;
+module.exports = router;

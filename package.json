@@ -1,9 +1,9 @@
 {
-    "name": "node-restserver",
+    "name": "Fast Market",
     "version": "0.2.1",
     "main": "server.js",
     "scripts": {
-        "start": "node server/server.js",
+        "start": "node server/index.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
@@ -24,7 +24,6 @@
     "description": "Una aplicación RestServer para pruebas",
     "dependencies": {
         "bcrypt": "^5.0.0",
-        "body-parser": "^1.19.0",
         "express": "^4.17.1",
         "express-fileupload": "^1.2.0",
         "google-auth-library": "^6.0.6",

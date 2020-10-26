@@ -1,21 +1,22 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const app = express();
+const router = express.Router();
 
 const Usuario = require('../models/usuario');
 const Producto = require('../models/producto');
 
 const fs = require('fs');
 const path = require('path');
-const producto = require('../models/producto');
 const { VerificacionToken } = require('../middlewares/autenticacion');
 
 
 // default options
-app.use(fileUpload());
+router.use(fileUpload({
+    useTempFiles: true
+}));
 
 
-app.put('/upload/:tipo/:id', VerificacionToken, (req, res) => {
+router.put('/upload/:tipo/:id', VerificacionToken, (req, res) => {
 
     const tipo = req.params.tipo;
     const id = req.params.id;
@@ -178,4 +179,4 @@ function borrarArchivo(nombreImagen, tipo) {
     if (fs.existsSync(pathImagen)) fs.unlinkSync(pathImagen);
 }
 
-module.exports = app;
+module.exports = router;
