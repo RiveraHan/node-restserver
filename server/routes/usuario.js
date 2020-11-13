@@ -36,7 +36,7 @@ router.get('/usuarios', VerificacionToken, (req, res) => {
     });
 });
 
-router.post('/usuario', [VerificacionToken, ValidacionAdminRole], (req, res) => {
+router.post('/usuario', (req, res) => {
     const body = req.body;
 
     if (body.password.length >= 6) {
