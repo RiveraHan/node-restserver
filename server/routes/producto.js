@@ -5,7 +5,7 @@ const Producto = require('../models/producto');
 const Categoria = require('../models/categoria');
 const { VerificacionToken } = require('../middlewares/autenticacion');
 
-router.get('/productos', VerificacionToken, (req, res) => {
+router.get('/productos', (req, res) => {
 
     const desde = req.query.desde || 0;
     Number(desde);
@@ -105,7 +105,7 @@ router.post('/producto', VerificacionToken, (req, res) => {
             precioUni: body.precioUni,
             descripcion: body.descripcion,
             categoria: categoriaDB._id,
-            usuario: req.usuario._id
+            //usuario: req.usuario._id
         });
 
         producto.save((err, producto) => {

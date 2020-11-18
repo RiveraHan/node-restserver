@@ -23,4 +23,7 @@ app.use(express.static(path.resolve(__dirname, '../public')));
 // Todos los routes de la app
 app.use(require('./routes/index'));
 
-app.listen(process.env.PORT, process.env.HOST, () => console.log(`Corriendo en:${process.env.HOST}:${process.env.PORT}`));
+app.listen(process.env.PORT, process.env.HOST, () => {
+    console.log(`HOST_DB: `, process.env.HOST_DB);
+    console.log(`Corriendo en:${process.env.HOST}:${process.env.PORT}`);
+});

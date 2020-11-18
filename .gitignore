@@ -2,6 +2,7 @@ node_modules/
 
 # Los temporales del Upload
 tmp/
+data/
 
 # ignorando los archivos de imagenes
 

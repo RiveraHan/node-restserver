@@ -9,7 +9,8 @@ services:
       links:
         - db
       environment:
-        - URLDB=mongodb://db:27017/cafe
+        - URLDB=mongodb://db:27017
+        - HOST_DB=db
 
     db:
       container_name: mongo
